@@ -106,9 +106,6 @@ def printDailyRankTbl(stats: dict, day: int) -> None:
     Prints formatted table containing ranking information for the particular
     day (non-cumulative).
     """
-    times = getTimes(stats, day)
-    scores = getScores(times)
-
     tblRows = []
     for i, [memID, (time1, time2), (score1, score2)] in enumerate(
         getRankTbl(stats, day)
