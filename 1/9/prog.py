@@ -9,7 +9,7 @@ def getRules(ruleInput: str) -> dict:
         a, b = line.split(": ")
         key = int(a)
         val = {
-            s[1:-1] if s.startswith('"') else tuple(map(int, s.split(" ")))
+            tuple(t[1:-1] if t.startswith('"') else int(t) for t in s.split(" "))
             for s in b.split(" | ")
         }
         rules[key] = val
@@ -20,20 +20,19 @@ def derive(rules: dict, start: tuple, expr: str) -> bool:
     if start == () or expr == "":
         return len(start) == len(expr)
 
-    for rhs in rules[start[0]]:
-        if type(rhs) is str:
-            if rhs == expr[0]:
-                return derive(rules, start[1:], expr[1:])
-        else:
-            expand = rhs + start[1:]
-            if derive(rules, expand, expr):
+    lhs = start[0]
+    if type(lhs) is str:
+        return lhs == expr[0] and derive(rules, start[1:], expr[1:])
+    else:
+        for rhs in rules[lhs]:
+            if derive(rules, rhs + start[1:], expr):
                 return True
     return False
 
 
 def a():
     with open("input.txt") as f:
-        ruleInput, messages = f.read().strip().split("\n\n")
+        ruleInput, messages = f.read().split("\n\n")
     rules = getRules(ruleInput)
 
     return sum(1 for line in messages.split("\n") if derive(rules, (0,), line))
@@ -41,7 +40,7 @@ def a():
 
 def b():
     with open("input.txt") as f:
-        ruleInput, messages = f.read().strip().split("\n\n")
+        ruleInput, messages = f.read().split("\n\n")
     rules = getRules(ruleInput)
 
     rules[8] = {(42,), (42, 8)}
