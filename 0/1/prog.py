@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
+import sys
 
-def a():
-    nums = set()
-    with open("input.txt") as f:
-        for line in f:
-            nums.add(int(line))
+
+def a(inputTxt: str) -> int:
+    nums = {int(line) for line in inputTxt.splitlines()}
 
     for x in nums:
         y = 2020 - x
@@ -13,11 +12,8 @@ def a():
             return x * y
 
 
-def b():
-    nums = set()
-    with open("input.txt") as f:
-        for line in f:
-            nums.add(int(line))
+def b(inputTxt: str) -> int:
+    nums = {int(line) for line in inputTxt.splitlines()}
 
     for x in nums:
         for y in nums:
@@ -26,4 +22,11 @@ def b():
                 return x * y * z
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

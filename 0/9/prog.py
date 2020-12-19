@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
 
-def pairSum(num: int, l: list) -> tuple:
+
+def findPairSum(num: int, l: list) -> tuple:
     s = set(l)
     for x in s:
         y = num - x
@@ -10,28 +12,32 @@ def pairSum(num: int, l: list) -> tuple:
     return None
 
 
-def a():
-    with open("input.txt") as f:
-        nums = list(map(int, f))
+def a(inputTxt: str) -> int:
+    nums = list(map(int, inputTxt.splitlines()))
 
     for i in range(25, len(nums)):
-        num = nums[i]
-        if pairSum(num, nums[i - 25 : i]) is None:
-            return num
+        if findPairSum(nums[i], nums[i - 25 : i]) is None:
+            return nums[i]
 
 
-def b():
-    goal = a()
-    with open("input.txt") as f:
-        nums = list(map(int, f))
+def b(inputTxt: str) -> int:
+    nums = list(map(int, inputTxt.splitlines()))
+    goal = a(inputTxt)
 
     for i in range(len(nums)):
         for j in range(i + 1, len(nums)):
-            x = sum(nums[i:j])
-            if x == goal:
-                return min(nums[i:j]) + max(nums[i:j])
-            elif x > goal:
+            x = nums[i:j]
+            if sum(x) == goal:
+                return min(x) + max(x)
+            elif sum(x) > goal:
                 break
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

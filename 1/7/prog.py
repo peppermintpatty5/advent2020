@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 from itertools import product
 
 
@@ -7,12 +8,11 @@ def adj(*t: int) -> set:
     return set(product(*({u - 1, u, u + 1} for u in t))) - {tuple(t)}
 
 
-def a():
-    with open("input.txt") as f:
-        start = f.read().strip()
+def a(inputTxt: str) -> int:
+    start = inputTxt.strip()
 
     active = set()
-    for y, row in enumerate(start.split("\n")):
+    for y, row in enumerate(start.splitlines()):
         for x, cell in enumerate(row):
             if cell == "#":
                 active.add((x, y, 0))
@@ -31,12 +31,11 @@ def a():
     return len(active)
 
 
-def b():
-    with open("input.txt") as f:
-        start = f.read().strip()
+def b(inputTxt: str) -> int:
+    start = inputTxt.strip()
 
     active = set()
-    for y, row in enumerate(start.split("\n")):
+    for y, row in enumerate(start.splitlines()):
         for x, cell in enumerate(row):
             if cell == "#":
                 active.add((x, y, 0, 0))
@@ -55,4 +54,11 @@ def b():
     return len(active)
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

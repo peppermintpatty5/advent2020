@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
+import sys
 from math import cos, sin, pi, sqrt, tan, atan2
 
 
-def a():
+def a(inputTxt: str) -> int:
     directions = []
-    with open("input.txt") as f:
-        for line in f:
-            directions.append((line[0], int(line[1:])))
+    for line in inputTxt.splitlines():
+        directions.append((line[0], int(line[1:])))
 
-    x, y = 0, 0
+    x, y = (0, 0)
     angle = 0
     for d, n in directions:
         if d == "N":
@@ -30,14 +30,13 @@ def a():
     return round(abs(x) + abs(y))
 
 
-def b():
+def b(inputTxt: str) -> int:
     directions = []
-    with open("input.txt") as f:
-        for line in f:
-            directions.append((line[0], int(line[1:])))
+    for line in inputTxt.splitlines():
+        directions.append((line[0], int(line[1:])))
 
-    x, y = 0, 0
-    wx, wy = 10, 1
+    x, y = (0, 0)
+    wx, wy = (10, 1)
     for d, n in directions:
         if d == "N":
             wy += n
@@ -63,4 +62,11 @@ def b():
     return round(abs(x) + abs(y))
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

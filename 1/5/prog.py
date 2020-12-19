@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
+import sys
 
-def a():
-    with open("input.txt") as f:
-        start = list(map(int, next(f).split(",")))
+
+def a(inputTxt: str) -> int:
+    start = list(map(int, inputTxt.split(",")))
 
     prev = -1
     cache = {}
@@ -20,9 +21,8 @@ def a():
     return num
 
 
-def b():
-    with open("input.txt") as f:
-        start = list(map(int, next(f).split(",")))
+def b(inputTxt: str) -> int:
+    start = list(map(int, inputTxt.split(",")))
 
     prev = -1
     cache = {}
@@ -39,4 +39,11 @@ def b():
     return num
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

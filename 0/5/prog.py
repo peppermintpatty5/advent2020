@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 
 def halfIt(lo: int, hi: int, steps: str, sig: str) -> int:
     for c in steps:
@@ -10,26 +12,29 @@ def halfIt(lo: int, hi: int, steps: str, sig: str) -> int:
     return lo
 
 
-def a():
+def a(inputTxt: str) -> int:
     seatIDs = set()
-    with open("input.txt") as f:
-        for line in f:
-            line = line.strip()
-            row = halfIt(0, 127, line[:7], "F")
-            col = halfIt(0, 7, line[7:], "L")
-            seatIDs.add(row * 8 + col)
+    for line in inputTxt.splitlines():
+        row = halfIt(0, 127, line[:7], "F")
+        col = halfIt(0, 7, line[7:], "L")
+        seatIDs.add(row * 8 + col)
     return max(seatIDs)
 
 
-def b():
+def b(inputTxt: str) -> int:
     seatIDs = set(range(128, 947))
-    with open("input.txt") as f:
-        for line in f:
-            line = line.strip()
-            row = halfIt(0, 127, line[:7], "F")
-            col = halfIt(0, 7, line[7:], "L")
-            seatIDs.discard(row * 8 + col)
+    for line in inputTxt.splitlines():
+        row = halfIt(0, 127, line[:7], "F")
+        col = halfIt(0, 7, line[7:], "L")
+        seatIDs.discard(row * 8 + col)
     return seatIDs.pop()
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 
-
-def a():
-    count = 0
-    x = 0
-    with open("input.txt") as f:
-        for line in f:
-            if line[x % len(line.strip())] == "#":
-                count += 1
-            x += 3
-    return count
+import sys
 
 
 def sled(right: int, down: int, grid: list) -> int:
@@ -24,9 +15,13 @@ def sled(right: int, down: int, grid: list) -> int:
     return count
 
 
-def b():
-    with open("input.txt") as f:
-        grid = [line.strip() for line in f]
+def a(inputTxt: str) -> int:
+    grid = inputTxt.splitlines()
+    return sled(3, 1, grid)
+
+
+def b(inputTxt: str) -> int:
+    grid = inputTxt.splitlines()
     slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
     prod = 1
     for right, down in slopes:
@@ -34,4 +29,11 @@ def b():
     return prod
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

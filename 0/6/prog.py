@@ -1,33 +1,37 @@
 #!/usr/bin/env python3
 
+import sys
 
-def a():
+
+def a(inputTxt: str) -> int:
     count = 0
-    s = set()
-    with open("input.txt") as f:
-        for line in f:
-            line = line.strip()
-            if line == "":
-                count += len(s)
-                s.clear()
-            else:
-                for c in line:
-                    s.add(c)
-    return count + len(s)
+    responses = []
+    for line in inputTxt.splitlines():
+        if line == "":
+            count += len(set.union(*responses))
+            responses.clear()
+        else:
+            responses.append(set(line))
+    return count + len(set.union(*responses))
 
 
-def b():
+def b(inputTxt: str) -> int:
     count = 0
-    l = []
-    with open("input.txt") as f:
-        for line in f:
-            line = line.strip()
-            if line == "":
-                count += len(set.intersection(*l))
-                l.clear()
-            else:
-                l.append(set(line))
-    return count + len(set.intersection(*l))
+    responses = []
+    for line in inputTxt.splitlines():
+        if line == "":
+            count += len(set.intersection(*responses))
+            responses.clear()
+        else:
+            responses.append(set(line))
+    return count + len(set.intersection(*responses))
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

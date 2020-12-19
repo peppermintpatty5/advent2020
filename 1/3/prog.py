@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
 
+import sys
 from math import ceil
 
 
-def a():
-    with open("input.txt") as f:
-        e = int(next(f))
-        schedule = [int(x) for x in next(f).strip().split(",") if x != "x"]
+def a(inputTxt: str) -> int:
+    lines = inputTxt.splitlines()
+    e = int(lines[0])
+    schedule = [int(x) for x in lines[1].split(",") if x != "x"]
 
     f = lambda t: t - (e % t)
     m = min(schedule, key=lambda t: f(t))
     return m * f(m)
 
 
-def b():
-    with open("input.txt") as f:
-        next(f)
-        s = [int(x) if x != "x" else 1 for x in next(f).strip().split(",")]
-
-    # for i in range(len(s)):
-    #     if s[i] != 1:
-    #         print(f"{-i}, {s[i]}")
+def b(inputTxt: str) -> int:
+    ...
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

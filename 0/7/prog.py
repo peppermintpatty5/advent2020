@@ -1,55 +1,66 @@
 #!/usr/bin/env python3
 
+import sys
 
-def a():
+
+def a(inputTxt: str) -> int:
     bags = {}
-    with open("input.txt") as f:
-        for line in f:
-            line = line.strip()[:-1]  # truncate period + newline
-            if line.endswith("no other bags"):
-                continue
+    for line in inputTxt.splitlines():
+        if line.endswith("no other bags."):
+            continue
 
-            a, b = line.split(" bags contain ")
-            outer = a
-            inner = [" ".join(x.split(" ")[1:3]) for x in b.split(", ")]
-            bags[outer] = inner
+        a, b = line.split(" bags contain ")
+        outer = a
+        inner = [" ".join(x.split(" ")[1:3]) for x in b.split(", ")]
+        bags[outer] = inner
 
-    gold = {"shiny gold"}  # all bags that reduce to shiny gold
-    for i in range(10):  # try out different values until stable lol
+    gold = set()  # all bags that reduce to shiny gold
+    while True:
+        newGold = set()
         for outer, inner in bags.items():
-            for bag in inner:
-                if bag in gold:
-                    gold.add(outer)
-                    break
-    return len(gold) - 1
+            if any(bag == "shiny gold" or bag in gold for bag in inner):
+                newGold.add(outer)
+
+        if len(newGold - gold) > 0:
+            gold |= newGold
+        else:
+            break
+
+    return len(gold)
 
 
 def countReduce(bag: str, bags: dict, quantities: dict) -> int:
-    if bag not in bags:
-        return 0
-    else:
+    if bag in bags:
         return sum(
             q + q * countReduce(inner, bags, quantities)
             for q, inner in zip(quantities[bag], bags[bag])
         )
+    else:
+        return 0
 
 
-def b():
+def b(inputTxt: str) -> int:
     bags = {}
     quantities = {}
-    with open("input.txt") as f:
-        for line in f:
-            line = line.strip()[:-1]
-            if line.endswith("no other bags"):
-                continue
+    for line in inputTxt.splitlines():
+        if line.endswith("no other bags."):
+            continue
 
-            a, b = line.split(" bags contain ")
-            outer = a
-            inner = [" ".join(x.split(" ")[1:3]) for x in b.split(", ")]
-            q = [int(x.split(" ")[0]) for x in b.split(", ")]
-            bags[outer] = inner
-            quantities[outer] = q
+        a, b = line.split(" bags contain ")
+        outer = a
+        inner = [" ".join(x.split(" ")[1:3]) for x in b.split(", ")]
+        q = [int(x.split(" ")[0]) for x in b.split(", ")]
+        bags[outer] = inner
+        quantities[outer] = q
+
     return countReduce("shiny gold", bags, quantities)
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

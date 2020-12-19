@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
+import sys
 
-def getRules(ruleInput: str) -> dict:
+
+def getRules(inputTxt: str) -> dict:
     rules = {}
-    for line in ruleInput.split("\n"):
+    for line in inputTxt.splitlines():
         if line == "":
-            continue
+            break
         a, b = line.split(": ")
         key = int(a)
         val = {
@@ -30,23 +32,30 @@ def derive(rules: dict, start: tuple, expr: str) -> bool:
     return False
 
 
-def a():
-    with open("input.txt") as f:
-        ruleInput, messages = f.read().split("\n\n")
-    rules = getRules(ruleInput)
+def a(inputTxt: str) -> int:
+    lines = inputTxt.splitlines()
+    rules = getRules(inputTxt)
+    messages = lines[lines.index("") + 1 :]
 
-    return sum(1 for line in messages.split("\n") if derive(rules, (0,), line))
+    return sum(1 for msg in messages if derive(rules, (0,), msg))
 
 
-def b():
-    with open("input.txt") as f:
-        ruleInput, messages = f.read().split("\n\n")
-    rules = getRules(ruleInput)
+def b(inputTxt: str) -> int:
+    lines = inputTxt.splitlines()
+    rules = getRules(inputTxt)
+    messages = lines[lines.index("") + 1 :]
 
     rules[8] = {(42,), (42, 8)}
     rules[11] = {(42, 31), (42, 11, 31)}
 
-    return sum(1 for line in messages.split("\n") if derive(rules, (0,), line))
+    return sum(1 for msg in messages if derive(rules, (0,), msg))
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 
 def tokenize(expr: str):
     return (c if c in "+*()" else int(c) for c in expr if not c.isspace())
@@ -54,18 +56,23 @@ def evaluate(infixExpr: str, precedence: dict) -> int:
     return stack.pop()
 
 
-def a():
-    with open("input.txt") as f:
-        exprList = [line.strip() for line in f]
+def a(inputTxt: str) -> int:
+    exprList = inputTxt.splitlines()
 
     return sum(evaluate(expr, {"+": 1, "*": 1}) for expr in exprList)
 
 
-def b():
-    with open("input.txt") as f:
-        exprList = [line.strip() for line in f]
+def b(inputTxt: str) -> int:
+    exprList = inputTxt.splitlines()
 
     return sum(evaluate(expr, {"+": 2, "*": 1}) for expr in exprList)
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

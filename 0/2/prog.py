@@ -1,28 +1,32 @@
 #!/usr/bin/env python3
 
+import re
+import sys
 
-def a():
+
+def a(inputTxt: str) -> int:
     count = 0
-    with open("input.txt") as f:
-        for line in f:
-            n, c, pw = line.split(" ")
-            c = c[0]
-            a, b = [int(x) for x in n.split("-", maxsplit=1)]
-            if a <= pw.count(c) <= b:
-                count += 1
+    for line in inputTxt.splitlines():
+        a, b, letter, passwd = re.split(r"[-: ]+", line)
+        if int(a) <= passwd.count(letter) <= int(b):
+            count += 1
     return count
 
 
-def b():
+def b(inputTxt: str) -> int:
     count = 0
-    with open("input.txt") as f:
-        for line in f:
-            n, c, pw = line.split(" ")
-            c = c[0]
-            a, b = [int(x) for x in n.split("-", maxsplit=1)]
-            if (pw[a - 1] == c) != (pw[b - 1] == c):
-                count += 1
+    for line in inputTxt.splitlines():
+        a, b, letter, passwd = re.split(r"[-: ]+", line)
+        if (passwd[int(a) - 1] == letter) != (passwd[int(b) - 1] == letter):
+            count += 1
     return count
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

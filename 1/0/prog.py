@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 
 def search(j: int, jolts: set):
     diff = [1, 2, 3]
@@ -15,9 +17,8 @@ def search(j: int, jolts: set):
         return [j]
 
 
-def a():
-    with open("input.txt") as f:
-        jolts = set(map(int, f))
+def a(inputTxt: str) -> int:
+    jolts = set(map(int, inputTxt.splitlines()))
 
     path = search(0, jolts)
     ones = 0
@@ -41,11 +42,17 @@ def pathCount(jolts: set) -> int:
     return sum(paths.get(k, 0) for k in [1, 2, 3])
 
 
-def b():
-    with open("input.txt") as f:
-        jolts = set(map(int, f))
+def b(inputTxt: str) -> int:
+    jolts = set(map(int, inputTxt.splitlines()))
 
     return pathCount(jolts)
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()

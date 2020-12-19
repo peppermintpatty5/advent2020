@@ -1,23 +1,33 @@
 #!/usr/bin/env python3
 
+import sys
+
+
+def getPassports(inputTxt: str) -> list:
+    passports = []
+    p = {}
+
+    for line in inputTxt.splitlines():
+        if line == "":
+            passports.append(p)
+            p = {}
+        else:
+            for field in line.split(" "):
+                key, val = field.split(":")
+                p[key] = val
+    passports.append(p)
+
+    return passports
+
 
 def allKeys(d: dict) -> bool:
     return all(k in d for k in ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])
 
 
-def a():
-    count = 0
-    with open("input.txt") as f:
-        passports = f.read().split("\n\n")
+def a(inputTxt: str) -> int:
+    passports = getPassports(inputTxt)
 
-    for p in passports:
-        d = {}
-        for field in p.split():
-            k, v = field.split(":", 1)
-            d[k] = v
-        if allKeys(d):
-            count += 1
-    return count
+    return sum(1 for p in passports if allKeys(p))
 
 
 def allVals(d: dict) -> bool:
@@ -43,19 +53,17 @@ def allVals(d: dict) -> bool:
     )
 
 
-def b():
-    count = 0
-    with open("input.txt") as f:
-        passports = f.read().split("\n\n")
+def b(inputTxt: str) -> int:
+    passports = getPassports(inputTxt)
 
-    for p in passports:
-        d = {}
-        for field in p.split():
-            k, v = field.split(":", 1)
-            d[k] = v
-        if allKeys(d) and allVals(d):
-            count += 1
-    return count
+    return sum(1 for p in passports if allKeys(p) and allVals(p))
 
 
-print(a(), b(), sep="\n")
+def main():
+    inputTxt = sys.stdin.read()
+    print(a(inputTxt))
+    print(b(inputTxt))
+
+
+if __name__ == "__main__":
+    main()
