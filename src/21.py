@@ -3,62 +3,47 @@
 import sys
 
 
-def a(inputTxt: str) -> int:
-    L = []
-    I = set()
+def getLIAR(inputTxt: str):
     A = set()
+    I = set()
+    L = []
     R = []
+
     for line in inputTxt.splitlines():
         a, b = line[:-1].split(" (contains ")
         ingredients = set(a.split(" "))
         allergens = set(b.split(", "))
-        A |= allergens
-        I |= ingredients
+        A.update(allergens)
+        I.update(ingredients)
         L.append(ingredients)
         R.append(allergens)
 
-    f = {}
-    for a in A:
-        x = set.intersection(*(l for l, r in zip(L, R) if a in r))
-        f[a] = x
-    possibleAllergens = set.union(*f.values())
-    count = 0
-    for i in I:
-        if i not in possibleAllergens:
-            count += sum(1 for l in L if i in l)
-    return count
+    return L, I, A, R
+
+
+def a(inputTxt: str) -> int:
+    L, I, A, R = getLIAR(inputTxt)
+    fin = {a: set.intersection(*(l for l, r in zip(L, R) if a in r)) for a in A}
+    impossibleAllergens = I - set.union(*fin.values())
+
+    return sum(sum(1 for l in L if i in l) for i in impossibleAllergens)
 
 
 def b(inputTxt: str) -> str:
-    L = []
-    I = set()
-    A = set()
-    R = []
-    for line in inputTxt.splitlines():
-        a, b = line[:-1].split(" (contains ")
-        ingredients = set(a.split(" "))
-        allergens = set(b.split(", "))
-        A |= allergens
-        I |= ingredients
-        L.append(ingredients)
-        R.append(allergens)
+    L, I, A, R = getLIAR(inputTxt)
+    fin = {a: set.intersection(*(l for l, r in zip(L, R) if a in r)) for a in A}
 
-    f = {}
-    for a in A:
-        x = set.intersection(*(l for l, r in zip(L, R) if a in r))
-        f[a] = x
-
-    g = {}
-    while len(f) > 0:
-        for a, x in f.items():
-            if len(x) == 1:
-                break
+    f = {}  # inverse of f function, maps ingredients to allergens
+    while len(fin) > 0:
+        a, x = next((a, x) for a, x in fin.items() if len(x) == 1)
         i = x.pop()
-        f.pop(a)
-        g[i] = a
-        for a, x in f.items():
+        fin.pop(a)
+        f[i] = a
+
+        for x in fin.values():
             x.discard(i)
-    return ",".join(sorted(g, key=g.get))
+
+    return ",".join(sorted(f, key=f.get))
 
 
 def main():
